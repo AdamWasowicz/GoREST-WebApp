@@ -1,0 +1,67 @@
+@import '../../assets/constants/styleConstants.scss';
+
+
+//Calc
+$navbar-item-max-height: calc(100vh / 15);
+$navbar-item-max-width: calc(100vw / 6);
+$navbar-item-margin-right: calc(100vw / 50);
+$items-container-padding-horizontal: calc(100vw / 50);
+$items-container-padding-vertical: calc(100vh / 50);
+$item-padding-horizontal: calc(100vw / 50);
+$item-padding-vertical: calc(100vh / 70);
+$text-font-size: calc(((100vh / 30) + (100vw / 40)) / 2);
+
+
+.NavBar {
+    //Object size
+    width: 100%;
+
+    //Shadow
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+
+
+    //ItemsContainer
+    > .ItemsContainer {
+        //Object size
+        width: 100%;
+        height: 100%;
+
+        //Content position
+        padding: $items-container-padding-vertical $items-container-padding-horizontal;
+
+        //Flex
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+
+
+        //NavBarItem
+        > .NavBarItem {
+
+            //Object position
+            margin-right: $navbar-item-margin-right;
+
+            //Content position
+            padding: $item-padding-vertical $item-padding-horizontal;
+            text-align: center;
+
+            //Color
+            color: $navBar-primary-50;
+
+            //Font
+            font-size: $text-font-size;
+            font-family: $font-header;
+
+            //Transition
+            transition: 0.2s;
+
+            //Hover
+            &:hover {
+                cursor: pointer;
+                color: $navBar-primary-5;
+                transition: 0.2s;
+                background-color: $navBar-primary-95;
+            }
+        }
+    }
+}
