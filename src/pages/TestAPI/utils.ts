@@ -1,11 +1,10 @@
-import GoRESTClient from "../../assets/classes/goRESTClient";
-import { getCommentResponse, getUserResponse } from "../../assets/classes/goRESTClient/types/response";
+import GoRESTClient from "../../assets/classes/GoRESTClient";
+import { getCommentResponse } from "../../assets/classes/GoRESTClient/types/response";
 
 const useTestAPI = () => {
 
     const test_getUsers = () => {
-        const client = new GoRESTClient(() => console.log('start'), () => console.log('end'));
-        client.getUsers(1, (response: getUserResponse) => console.log(response));
+
     }
 
     const test_getPostComments = () => {

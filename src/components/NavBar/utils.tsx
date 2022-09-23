@@ -1,4 +1,5 @@
 import React from "react";
+import { useLocation } from "react-router";
 import { useNavigate } from "react-router";
 import { routes } from '../../router/routes';
 import NavBarItem from "./NavBarItem";
@@ -6,10 +7,18 @@ import NavBarItem from "./NavBarItem";
 const useNavBar = () => {
 
     const navigation = useNavigate();
-
+    const location = useLocation();
+    
 
     const handleRedirect = (route: string) => {
         navigation(route);
+    }
+
+    const isRouteActive = (routeName: string): boolean => {
+        if (location.pathname.split('/')[1] == routeName)
+            return true;
+        
+        return false;
     }
 
     const renderNavBarItems = () => {
@@ -20,6 +29,7 @@ const useNavBar = () => {
                     key={index}
                     onClick={() => handleRedirect(route.route)}
                     caption={route.name}
+                    isActive={isRouteActive(route.route)}
                 />
                 : null;
             })

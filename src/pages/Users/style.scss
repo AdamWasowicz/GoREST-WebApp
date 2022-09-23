@@ -1,0 +1,155 @@
+@import '../../assets/constants/styleConstants.scss';
+
+//Calc
+$user-item-width: calc(100% / 2);
+$user-item-height: calc(100% / 1);
+$icon-size-portrait: calc(100vw / 40);
+$data-font-size-portrait: calc(100vw / 30);
+$data-font-size-landscape: 50px;
+$item-padding-horizontal: calc(100vw / 300);
+
+
+.User {
+    //Object size
+    width: 100%;
+    max-width: 100%;
+
+    //Color
+    background-color: $navBar-primary-95;
+
+
+    //ContentContainer
+    >.ContentContainer {
+        //Content position
+        padding: 0px 24px;
+
+
+        //ItemsContainer
+        >.ItemsContainer {
+            //Object size
+            width: 100%;
+
+
+            //UserItem
+            .UserItem {
+                //Object size
+                width: $user-item-width;
+                height: 300px;
+
+                //Content positon
+                padding: 10px $item-padding-horizontal;
+
+
+                //Container
+                >.Container {
+                    //Flex
+                    display: flex;
+                    flex-direction: row;
+
+                    //Object size
+                    height: $user-item-height;
+                    max-height: 250px;
+                    max-width: 1100px;
+
+                    //Content position
+                    padding: 16px;
+
+                    //Object position
+                    margin-left: auto;
+                    margin-right: auto;
+                    margin-bottom: 24px;
+
+                    //Color
+                    background-color: white;
+
+                    //Shadow
+                    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+
+                    //RWD portrait
+                    @media (orientation: portrait) {
+                        //Flex
+                        flex-direction: column;
+                    }
+
+
+                    //Icon
+                    >.Icon {
+                        //Flex
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+
+                        //Font
+                        font-size: 200px;
+
+                        //Color
+                        color: $navBar-primary-5;
+
+                        //Content position
+                        padding: 24px;
+
+                        //RWD portrait
+                        @media (orientation: portrait) {
+                            //Font
+                            font-size: 120px;
+                            padding: 0;
+                        }
+
+                        //When user is inactive
+                        &.Inactive {
+                            color: $navBar-primary-80;
+                        }
+                    }
+
+                    //Data
+                    >.Data {
+                        //Font
+                        font-size: $icon-size-portrait;
+
+                        //Content positon
+                        text-align: center;
+
+                        //Flex
+                        flex: 1;
+
+                        //RWD portrait
+                        @media (orientation: portrait) {
+                            //Flex
+                            font-size: 16px;
+
+                            //Object positon
+                            margin-top: 8px;
+                        }
+
+                        
+                        > h3 {
+                            font-size: $data-font-size-landscape;
+                            font-family: $font-header;
+
+                            //RWD portrait
+                            @media (orientation: portrait) {
+                                font-size: 24px;
+                            }
+                        }
+
+                        > p {
+                            font-size: 28px;
+                            font-family: $font-normal;
+                            color: $navBar-primary-35;
+
+                            //RWD portrait
+                            @media (orientation: portrait) {
+                                font-size: 16px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        //Hide scrool bar
+        .ItemsContainer::-webkit-scrollbar {
+            display: none;
+        }
+    }
+}

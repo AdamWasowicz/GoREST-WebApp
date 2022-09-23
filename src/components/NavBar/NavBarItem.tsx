@@ -5,12 +5,21 @@ interface NavBarItemProps {
     caption: string,
     onClick: () => void,
     key: number,
+    isActive: boolean,
 }
 
 const NavBarItem: React.FC<NavBarItemProps> = (props) => {
 
+    const getClassName = () => {
+        let name = 'NavBarItem';
+        if (props.isActive == true)
+            name += ' Active';
+
+        return name;
+    }
+
     return (
-        <div className="NavBarItem" key={props.key} onClick={props.onClick}>
+        <div className={getClassName()} onClick={props.onClick}>
             {props.caption}
         </div>
     )

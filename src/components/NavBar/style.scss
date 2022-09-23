@@ -19,6 +19,9 @@ $text-font-size: calc(((100vh / 30) + (100vw / 40)) / 2);
     //Shadow
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 
+    //Object position
+    margin-bottom: 15px;
+
 
     //ItemsContainer
     > .ItemsContainer {
@@ -54,6 +57,14 @@ $text-font-size: calc(((100vh / 30) + (100vw / 40)) / 2);
 
             //Transition
             transition: 0.2s;
+
+            &.Active {
+                color: $active-color;
+
+                &:hover {
+                    color: $active-bright-color;
+                }
+            }
 
             //Hover
             &:hover {

@@ -65,6 +65,7 @@ module.exports = () => {
 
       new EnvironmentPlugin({
         REACT_APP_API_URL: ' https://gorest.co.in',
+        REACT_APP_MODE: 'Development',
       })
     ],
   }

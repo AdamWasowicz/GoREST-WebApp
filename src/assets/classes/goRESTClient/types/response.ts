@@ -1,12 +1,17 @@
 import PostModel from "./post";
 import RequestMeta from "./requestMeta";
-import TodoModel from "./todo";
+import TodoModel, { TodoWithUserNameModel } from "./todo";
 import UserModel from "./user";
 
 
-export interface getUserResponse {
+export interface getUsersResponse {
     meta: RequestMeta,
     data: UserModel[],
+}
+
+export interface getUserResponse {
+    meta: RequestMeta,
+    data: UserModel,
 }
 
 export interface getPostResponse {
@@ -19,7 +24,12 @@ export interface getCommentResponse {
     data: Comment[],
 }
 
-export interface getTodoResponse {
+export interface getTodosResponse {
     meta: RequestMeta,
     data: TodoModel[],
+}
+
+export interface getTodoWithUserNameResponse {
+    meta: RequestMeta,
+    data: TodoWithUserNameModel[],
 }

@@ -14,15 +14,6 @@ module.exports = {
     poll: true
   },
 
-  // devServer: {
-  //   host: '0.0.0.0',
-  //   allowedHosts: 'all',
-  //   hot: true,
-  //   historyApiFallback: true,
-  //   port: 3000,
-  //   open: true,
-  // },
-
   mode: 'production',
   devtool: 'inline-source-map',
   module: {
@@ -68,6 +59,7 @@ module.exports = {
 
     new EnvironmentPlugin({
       REACT_APP_API_URL: ' https://gorest.co.in',
+      REACT_APP_MODE: 'Production',
     })
   ],
 };

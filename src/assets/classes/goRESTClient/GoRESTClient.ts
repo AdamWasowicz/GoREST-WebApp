@@ -1,5 +1,7 @@
-import { getUserResponse, getPostResponse, getCommentResponse } from './types/response';
+import { getUsersResponse, getPostResponse, getCommentResponse, getTodosResponse, getTodoWithUserNameResponse, getUserResponse } from './types/response';
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import TodoModel, { TodoWithUserNameModel } from './types/todo';
+import RequestMeta from './types/requestMeta'
 
 
 export default class GoRESTClient {
@@ -9,6 +11,7 @@ export default class GoRESTClient {
     private apiURL: string = 'https://gorest.co.in';
 
 
+    //used in no Promise flow
     private makeGetRequest = (route: string, onRequestComplete: (response: any) => void): void => {
         
         this.onRequestStart();
@@ -29,9 +32,48 @@ export default class GoRESTClient {
         })
     }
 
-    public getUsers = (pageNumber: number, onRequestComplete: (response: getUserResponse) => void): void => {
+    //Used in Promise flow
+    private makeGetRequestReturnPromise = async (route: string): Promise<AxiosResponse<any>> => {
+        this.onRequestStart();
+        const url = this.apiURL + route;
+
+        return axios({
+            method: 'GET',
+            url: url,
+        })
+        
+    }
+
+    public getUsersReturnPromise = async (pageNumber: number): Promise<getUsersResponse> => {
         const route = ApiEnpoints.getUsers.route + `?page=${pageNumber}`;
-        this.makeGetRequest(route, onRequestComplete);
+
+        //recives Promise<AxiosResponse<getUserExponse>>
+        const result = await this.makeGetRequestReturnPromise(route);
+
+        //creates new Promise<getUserResponse>
+        const promise = new Promise<getUsersResponse>( (resolve, reject) => {
+            resolve(result.data);
+            this.onRequestEnd();
+        })
+
+        //returns promise
+        return promise;
+    }
+
+    public getUserByIdReturnPromise = async (userId: number): Promise<getUserResponse> => {
+        const route = ApiEnpoints.getUsers.route + `/${userId}`;
+
+        //recives Promise<AxiosResponse<getUserExponse>>
+        const result = await this.makeGetRequestReturnPromise(route);
+
+        //creates new Promise<getUserResponse>
+        const promise = new Promise<getUserResponse>( (resolve, reject) => {
+            resolve(result.data);
+            this.onRequestEnd();
+        })
+
+        //returns promise
+        return promise;
     }
 
     public getPosts = (pageNumber: number, onRequestComplete: (respnose: getPostResponse) => void): void => {
@@ -47,6 +89,48 @@ export default class GoRESTClient {
     public getTodos = (pageNumber: number, onRequestComplete: (respnose: getCommentResponse) => void): void => {
         const route = ApiEnpoints.getTodos.route + `?page=${pageNumber}`;
         this.makeGetRequest(route, onRequestComplete);
+    }
+
+    public getTodosWithUserName = async (pageNumber: number): Promise<getTodoWithUserNameResponse> => {
+        const route = ApiEnpoints.getTodos.route + `?page=${pageNumber}`;
+        const result = await this.makeGetRequestReturnPromise(route);
+
+        const dataFromAPI: TodoModel[] = result.data.data;
+        const metaFromApi: RequestMeta = result.data.meta;
+
+        //Get names coresponding to user_id and asign thnem to model
+        let todosWithUserName: TodoWithUserNameModel[] = [];
+        await Promise.all( 
+            await dataFromAPI.map( async (item, index) => {
+                await this.getUserNameForTodo(item)
+                .then((result) => {
+                    todosWithUserName[index] = {
+                        id: dataFromAPI[index].id,
+                        user_id: dataFromAPI[index].user_id,
+                        title: dataFromAPI[index].title,
+                        due_on: dataFromAPI[index].due_on,
+                        status: dataFromAPI[index].status,
+                        name: result.data.name,
+                    }
+                });
+            })    
+        )
+
+        const promisedData: getTodoWithUserNameResponse = {
+            meta: metaFromApi,
+            data: todosWithUserName,
+        };
+
+        const promise = new Promise<getTodoWithUserNameResponse>((resolve, reject) =>{
+            resolve(promisedData)  
+        })
+
+        //returns promise
+        return promise;
+    }
+
+    public getUserNameForTodo = async (dataFromAPI: TodoModel): Promise<getUserResponse> => {
+        return this.getUserByIdReturnPromise(dataFromAPI.user_id);
     }
 
     public getPostComments = (postId: number, onRequestComplete: (response: getCommentResponse) => void): void => {
