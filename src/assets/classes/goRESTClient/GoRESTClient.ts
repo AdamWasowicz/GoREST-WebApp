@@ -1,40 +1,17 @@
-import { getUsersResponse, getPostResponse, getCommentResponse, getTodosResponse, getTodoWithUserNameResponse, getUserResponse } from './types/response';
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import { getUsersResponse, getCommentResponse, getTodoWithUserNameResponse, getUserResponse, getPostsWithCommentsResponse } from './types/response';
+import axios, { AxiosResponse } from 'axios';
 import TodoModel, { TodoWithUserNameModel } from './types/todo';
 import RequestMeta from './types/requestMeta'
+import PostModel, { PostCompleteModel } from './types/post';
+import CommentModel from './types/comment';
 
 
 export default class GoRESTClient {
 
-    private onRequestStart: () => void;
-    private onRequestEnd: () => void;
     private apiURL: string = 'https://gorest.co.in';
 
 
-    //used in no Promise flow
-    private makeGetRequest = (route: string, onRequestComplete: (response: any) => void): void => {
-        
-        this.onRequestStart();
-        const url = this.apiURL + route;
-
-        axios({
-            method: 'GET',
-            url: url,
-        })
-        .then((response: AxiosResponse) => {
-            onRequestComplete(response.data);
-        })
-        .catch((error: AxiosError) => {
-            console.log(`${error.code} : ${error.message}`);
-        })
-        .finally(() => {
-            this.onRequestEnd();
-        })
-    }
-
-    //Used in Promise flow
     private makeGetRequestReturnPromise = async (route: string): Promise<AxiosResponse<any>> => {
-        this.onRequestStart();
         const url = this.apiURL + route;
 
         return axios({
@@ -53,42 +30,42 @@ export default class GoRESTClient {
         //creates new Promise<getUserResponse>
         const promise = new Promise<getUsersResponse>( (resolve, reject) => {
             resolve(result.data);
-            this.onRequestEnd();
         })
 
         //returns promise
         return promise;
     }
 
-    public getUserByIdReturnPromise = async (userId: number): Promise<getUserResponse> => {
+    public getCommentsByPostIdReturnPromise = async (pageNumber: number, postId: number): Promise<getCommentResponse> => {
+        const route = ApiEnpoints.getComments.route + `?page=${pageNumber}&post_id=${postId}`;
+
+        //recives Promise<AxiosResponse<getCommentResponse>>
+        const result = await this.makeGetRequestReturnPromise(route);
+        
+        //creates new Promise<getCommentResponse>
+        const promise = new Promise<getCommentResponse>((resolve) => {
+            resolve(result.data);
+        })
+
+        return promise;
+    }
+
+    private getUserByIdReturnPromise = async (userId: number): Promise<getUserResponse> => {
         const route = ApiEnpoints.getUsers.route + `/${userId}`;
+        let promise: Promise<getUserResponse>;
 
         //recives Promise<AxiosResponse<getUserExponse>>
-        const result = await this.makeGetRequestReturnPromise(route);
+        await this.makeGetRequestReturnPromise(route)
+            .then(response => {
+                promise = new Promise<getUserResponse>( (resolve, reject) => {
+                    resolve(response.data);
+                });
+            })
+            .catch(error => {
+                //Promise.reject(new Error('This resource does not exist'))
+            });
 
-        //creates new Promise<getUserResponse>
-        const promise = new Promise<getUserResponse>( (resolve, reject) => {
-            resolve(result.data);
-            this.onRequestEnd();
-        })
-
-        //returns promise
         return promise;
-    }
-
-    public getPosts = (pageNumber: number, onRequestComplete: (respnose: getPostResponse) => void): void => {
-        const route = ApiEnpoints.getPosts.route + `?page=${pageNumber}`;
-        this.makeGetRequest(route, onRequestComplete);
-    }
-
-    public getComments = (pageNumber: number, onRequestComplete: (respnose: getCommentResponse) => void): void => {
-        const route = ApiEnpoints.getComments.route + `?page=${pageNumber}`;
-        this.makeGetRequest(route, onRequestComplete);
-    }
-
-    public getTodos = (pageNumber: number, onRequestComplete: (respnose: getCommentResponse) => void): void => {
-        const route = ApiEnpoints.getTodos.route + `?page=${pageNumber}`;
-        this.makeGetRequest(route, onRequestComplete);
     }
 
     public getTodosWithUserName = async (pageNumber: number): Promise<getTodoWithUserNameResponse> => {
@@ -102,48 +79,143 @@ export default class GoRESTClient {
         let todosWithUserName: TodoWithUserNameModel[] = [];
         await Promise.all( 
             await dataFromAPI.map( async (item, index) => {
-                await this.getUserNameForTodo(item)
-                .then((result) => {
-                    todosWithUserName[index] = {
-                        id: dataFromAPI[index].id,
-                        user_id: dataFromAPI[index].user_id,
-                        title: dataFromAPI[index].title,
-                        due_on: dataFromAPI[index].due_on,
-                        status: dataFromAPI[index].status,
-                        name: result.data.name,
-                    }
-                });
+                await this.getUserByIdReturnPromise(item.user_id)
+                    .then((result) => {
+                        todosWithUserName[index] = {
+                            id: dataFromAPI[index].id,
+                            user_id: dataFromAPI[index].user_id,
+                            title: dataFromAPI[index].title,
+                            due_on: dataFromAPI[index].due_on,
+                            status: dataFromAPI[index].status,
+                            name: result.data.name,
+                        }
+                    })
+                    .catch(error => {
+                        todosWithUserName[index] = {
+                            id: dataFromAPI[index].id,
+                            user_id: dataFromAPI[index].user_id,
+                            title: dataFromAPI[index].title,
+                            due_on: dataFromAPI[index].due_on,
+                            status: dataFromAPI[index].status,
+                            name: 'Anonymous',
+                        }
+                    })
             })    
         )
 
+        //Filter null just in case
+        todosWithUserName = todosWithUserName.filter(item => item != null);
+
+        //create model to contain data to be returned with promise
         const promisedData: getTodoWithUserNameResponse = {
             meta: metaFromApi,
             data: todosWithUserName,
         };
 
+        //create promise
         const promise = new Promise<getTodoWithUserNameResponse>((resolve, reject) =>{
             resolve(promisedData)  
         })
 
-        //returns promise
+        //return promise
         return promise;
     }
 
-    public getUserNameForTodo = async (dataFromAPI: TodoModel): Promise<getUserResponse> => {
-        return this.getUserByIdReturnPromise(dataFromAPI.user_id);
+    public getPostsWithCommentsReturnPromise = async (pageNumber: number): Promise <getPostsWithCommentsResponse> => {
+        const route = ApiEnpoints.getPosts.route + `?page=${pageNumber}`;
+        const result = await this.makeGetRequestReturnPromise(route);
+
+        const dataFromAPI: PostModel[] = result.data.data;
+        const metaFromApi: RequestMeta = result.data.meta;
+
+        let postsWithComments: PostCompleteModel[] = [];
+
+        //Get comments for posts
+        await Promise.all(
+            await dataFromAPI.map( async (item, index) => {
+                await this.getCommentsForPost(item.id)
+                    .then(result => {
+                        const newEntry: PostCompleteModel = {
+                            id: item.id,
+                            body: item.body,
+                            title: item.title,
+                            user_id: item.user_id,
+                            comments: result,
+                            userName: ''
+                        }
+
+                        postsWithComments.push(newEntry);
+                    })
+                    .catch(error => {
+                        const newEntry: PostCompleteModel = {
+                            id: item.id,
+                            body: item.body,
+                            title: item.title,
+                            user_id: item.user_id,
+                            comments: [],
+                            userName: ''
+                        }
+
+                        postsWithComments.push(newEntry);
+                    })
+            })
+        )
+
+        //Get username
+        Promise.all(
+            await postsWithComments.map( async (item, index) => {
+                await this.getUserByIdReturnPromise(item.user_id)
+                    .then(result => {
+                        postsWithComments[index].userName = result.data.name;
+                    })
+                    .catch(error => {
+                        postsWithComments[index].userName = 'Anonymous';
+                    })
+            })
+        )
+
+
+        const promisedData: getPostsWithCommentsResponse = {
+            meta: metaFromApi,
+            data: postsWithComments,
+        }
+        const promise = new Promise<getPostsWithCommentsResponse>((resolve) => {
+            resolve(promisedData);
+        })
+
+        return promise;
     }
 
-    public getPostComments = (postId: number, onRequestComplete: (response: getCommentResponse) => void): void => {
-        const route = ApiEnpoints.getPosts.route + `/${postId}/comments`;
-        this.makeGetRequest(route, onRequestComplete);
+    private getCommentsForPost = async (postId: number): Promise<CommentModel[]> => {
+        let comments: CommentModel[] = [];
+        let isMore = true;
+        let pageNumber = 1;
+
+
+        while (isMore) {
+            await this.getCommentsByPostIdReturnPromise(pageNumber, postId)
+                .then(response => {
+                    pageNumber++;
+
+                    if (pageNumber >= response.meta.pagination.pages)
+                        isMore = false;
+                    
+                    if (response.data != null)
+                        comments = [...comments, ...response.data];
+                });
+        }
+
+        const promise = new Promise<CommentModel[]>((resolve) => {
+            resolve(comments);
+        })
+
+        return promise;
     }
 
 
-    constructor( onRequestStart: () => void, onRequestEnd: () => void) {
-        this.onRequestStart = onRequestStart;
-        this.onRequestEnd = onRequestEnd;
-    }
+    constructor() {}
 }
+
 
 const ApiEnpoints = {
     getPosts: {

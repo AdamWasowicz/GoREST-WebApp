@@ -32,30 +32,17 @@ const useUsers = () => {
     }
 
     //Use when you need load more users from API
-    const loadMoreUsers = async (params: IndexRange) => {
+    const loadMoreUsers = async () => {
         if (isLoading == true)
             return;
 
-        const client = new GoRESTClient(
-            () => dispatch(setUserIsLoading(true)),
-            () => dispatch(setUserIsLoading(false))
-        );
+        const client = new GoRESTClient();
 
+        dispatch(setUserIsLoading(true));
         await client.getUsersReturnPromise(currentPage)
             .then(response => {
                 handleUserDataRecived(response);
-            });
-    }
-
-    const loadInitialData = () => {
-        const client = new GoRESTClient(
-            () => dispatch(setUserIsLoading(true)),
-            () => dispatch(setUserIsLoading(false))
-        );
-
-        client.getUsersReturnPromise(currentPage)
-            .then(result => {
-                handleUserDataRecived(result);
+                dispatch(setUserIsLoading(false));
             });
     }
 
@@ -72,13 +59,14 @@ const useUsers = () => {
     //Load initial data
     useEffect(() => {
         if (users.length === 0)
-            loadInitialData();
+            loadMoreUsers();
     }, [])
 
 
     return { 
         loadMoreUsers, users, isRowLoaded,
         height, width, renderRow,
+        isLoading
     }
 }
 

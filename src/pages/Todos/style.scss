@@ -14,180 +14,169 @@ $item-padding-horizontal: calc(100vw / 300);
     //Object size
     width: 100%;
     max-width: 100%;
+    height: 100vh;
 
     //Color
     background-color: $navBar-primary-95;
 
 
     //ContentContainer
-    > .ContentContainer {
+    >.ContentContainer {
         //Content position
         padding: 0px 24px;
 
 
-        //ItemsContainer
-        > .ItemsContainer {
+        //TodoItem
+        .TodoItem {
             //Object size
-            width: 100%;
+            width: $todo-item-width;
+
+            //Content positon
+            padding: 10px $item-padding-horizontal;
 
 
-            //TodoItem
-            .TodoItem {
+            //Container
+            >.Container {
+                //Flex
+                display: flex;
+                flex-direction: row;
+
                 //Object size
-                width: $todo-item-width;
-                
-                //Content positon
-                padding: 10px $item-padding-horizontal;
+                height: $todo-item-height;
+                max-height: 325px;
+                max-width: 1100px;
+
+                //Content position
+                padding: 16px;
+
+                //Object position
+                margin-left: auto;
+                margin-right: auto;
+                margin-bottom: 24px;
+
+                //Color
+                background-color: white;
+
+                //Shadow
+                box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+
+                //RWD portrait
+                @media (orientation: portrait) {
+                    //Flex
+                    flex-direction: column;
+                }
 
 
-                //Container
-                > .Container {
+                //Icon
+                >.Icon {
                     //Flex
                     display: flex;
-                    flex-direction: row;
+                    flex-direction: column;
+                    justify-content: center;
 
-                    //Object size
-                    height: $todo-item-height;
-                    max-height: 325px;
-                    max-width: 1100px;
-
-                    //Content position
-                    padding: 16px;
-
-                    //Object position
-                    margin-left: auto;
-                    margin-right: auto;
-                    margin-bottom: 24px;
+                    //Font
+                    font-size: 200px;
 
                     //Color
-                    background-color: white;
+                    color: $navBar-primary-5;
 
-                    //Shadow
-                    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+                    //Content position
+                    padding: 24px;
+
+                    //RWD portrait
+                    @media (orientation: portrait) {
+                        //Font
+                        font-size: 120px;
+                        padding: 0;
+                    }
+
+                    @media (max-width: 600px) and (orientation: portrait) {
+                        font-size: 64px;
+                    }
+
+
+                    &.Completed {
+                        color: $safe-color;
+                    }
+
+                    &.Pending {
+                        color: $danger-color;
+                    }
+
+                    &.Overdue {
+                        color: $error-color;
+                    }
+                }
+
+
+                //Data
+                >.Data {
+                    //Font
+                    font-size: $icon-size-portrait;
+
+                    //Content positon
+                    text-align: center;
+
+                    //Flex
+                    flex: 1;
 
                     //RWD portrait
                     @media (orientation: portrait) {
                         //Flex
-                        flex-direction: column;
+                        font-size: 16px;
+
+                        //Object positon
+                        margin-top: 8px;
                     }
 
 
-                    //Icon
-                    >.Icon {
-                        //Flex
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: center;
-
-                        //Font
-                        font-size: 200px;
-
-                        //Color
+                    >h1 {
+                        font-size: $data-name-font-size;
+                        font-family: $font-header;
                         color: $navBar-primary-5;
 
-                        //Content position
-                        padding: 24px;
+                        @media (max-width: 600px) {
+                            font-size: 32px;
+                        }
+                    }
+
+
+                    >h3 {
+                        font-size: $data-title-font-size;
+                        font-family: $font-normal;
+                        color: $navBar-primary-35;
 
                         //RWD portrait
                         @media (orientation: portrait) {
-                            //Font
-                            font-size: 120px;
-                            padding: 0;
+                            font-size: 24px;
                         }
 
-                        @media (max-width: 600px) and (orientation: portrait) {
-                            font-size: 64px;
+                        @media (max-width: 600px) {
+                            font-size: 20px;
                         }
+                    }
 
-
-                        &.Completed {
-                            color: $safe-color;
-                        }
+                    >p {
+                        font-size: 32px;
+                        font-family: $font-normal;
+                        color: $safe-color;
+                        font-weight: bold;
 
                         &.Pending {
                             color: $danger-color;
                         }
 
-                        &.Overdue {
-                            color: $error-color;
-                        }
-                    }
-
-
-                    //Data
-                    >.Data {
-                        //Font
-                        font-size: $icon-size-portrait;
-
-                        //Content positon
-                        text-align: center;
-
-                        //Flex
-                        flex: 1;
-
                         //RWD portrait
                         @media (orientation: portrait) {
-                            //Flex
-                            font-size: 16px;
-
-                            //Object positon
-                            margin-top: 8px;
+                            font-size: 24px;
                         }
 
-
-                        > h1 {
-                            font-size: $data-name-font-size;
-                            font-family: $font-header;
-                            color: $navBar-primary-5;
-
-                            @media (max-width: 600px) {
-                                font-size: 32px;
-                            }
-                        }
-
-
-                        > h3 {
-                            font-size: $data-title-font-size;
-                            font-family: $font-normal;
-                            color: $navBar-primary-35;
-
-                            //RWD portrait
-                            @media (orientation: portrait) {
-                                font-size: 24px;
-                            }
-
-                            @media (max-width: 600px) {
-                                font-size: 20px;
-                            }
-                        }
-
-                        > p {
-                            font-size: 32px;
-                            font-family: $font-normal;
-                            color: $safe-color;
-                            font-weight: bold;
-
-                            &.Pending {
-                                color: $danger-color;
-                            }
-
-                            //RWD portrait
-                            @media (orientation: portrait) {
-                                font-size: 24px;
-                            }
-
-                            @media (max-width: 600px) {
-                                font-size: 20px;
-                            }
+                        @media (max-width: 600px) {
+                            font-size: 20px;
                         }
                     }
                 }
             }
-        }
-
-        //Hide scrool bar
-        .ItemsContainer::-webkit-scrollbar {
-            display: none;
         }
     }
 }

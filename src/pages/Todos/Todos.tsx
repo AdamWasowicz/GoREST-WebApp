@@ -1,42 +1,35 @@
 import React from 'react';
 import useTodos from './utils';
 import './style.scss';
-import { InfiniteLoader, List } from 'react-virtualized';
-import Footer from "../../components/Footer";
+import InfiniteList from "../../components/InfiniteList";
+import Loading from '../../components/Loading';
+
 
 const Todos: React.FC = () => {
 
     const {
         loadMoreTodos, todos, isRowLoaded,
-        height, width, renderRow,
+        height, width, renderRow, isLoading
     } = useTodos();
+
 
     return (
         <div className='Todos'>
             <div className='ContentContainer'>
-                <   InfiniteLoader
-                    isRowLoaded={isRowLoaded}
-                    loadMoreRows={loadMoreTodos}
-                    rowCount={3000}
-                    minimumBatchSize={1}
-                    threshold={10}
-                >
-                    {({ onRowsRendered, registerChild }) => (
-                        <List
+                {
+                    todos.length != 0 && isLoading == false
+                    ? <InfiniteList
+                            isRowLoaded={isRowLoaded}
+                            loadMoreRowsCallback={loadMoreTodos}
                             height={height / 1.2}
                             width={width}
                             rowCount={todos.length}
-                            rowHeight={325}
-                            onRowsRendered={onRowsRendered}
-                            ref={registerChild}
-                            rowRenderer={renderRow}
-                            className='ItemsContainer'
-                            style={{ width: '100%' }}
-                        />
-                    )}
-                </InfiniteLoader>
+                            rowHeight={275}
+                            renderRowCallback={renderRow}
+                    />
+                    : <Loading/>
+                }
             </div>
-            <Footer/>
         </div>
     )
 }

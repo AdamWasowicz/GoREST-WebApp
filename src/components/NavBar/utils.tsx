@@ -15,7 +15,7 @@ const useNavBar = () => {
     }
 
     const isRouteActive = (routeName: string): boolean => {
-        if (location.pathname.split('/')[1] == routeName)
+        if (location.pathname.split('/')[1] == routeName && location.pathname.split('/').length == 2)
             return true;
         
         return false;

@@ -1,0 +1,9 @@
+.ItemsContainer {
+    //Object size
+    width: 100%;
+}
+
+//Hide scrool bar
+ .ItemsContainer::-webkit-scrollbar {
+    display: none;
+}

@@ -6,7 +6,7 @@ interface TodoState {
     todos: TodoWithUserNameModel[]
     currentPage: number,
     isMore: boolean,
-    isLoading: boolean;
+    isLoading: boolean,
 }
 
 const initialState: TodoState = {

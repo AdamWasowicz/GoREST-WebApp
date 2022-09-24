@@ -1,4 +1,5 @@
-import PostModel from "./post";
+import CommentModel from "./comment";
+import PostModel, { PostCompleteModel } from "./post";
 import RequestMeta from "./requestMeta";
 import TodoModel, { TodoWithUserNameModel } from "./todo";
 import UserModel from "./user";
@@ -19,9 +20,14 @@ export interface getPostResponse {
     data: PostModel[],
 }
 
+export interface getPostsWithCommentsResponse {
+    meta: RequestMeta,
+    data: PostCompleteModel[],
+}
+
 export interface getCommentResponse {
     meta: RequestMeta,
-    data: Comment[],
+    data: CommentModel[],
 }
 
 export interface getTodosResponse {

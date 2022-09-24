@@ -1,3 +1,4 @@
+import Error404 from "../pages/Error404";
 import Posts from "../pages/Posts";
 import TestAPI from "../pages/TestAPI";
 import Todos from "../pages/Todos";
@@ -32,5 +33,19 @@ export const routes: IRoute[] = [
         route: 'todos',
         name: 'Todos',
         showInNavBar: true,
-    }
+    },
+
+    {
+        module: Error404,
+        route: '404',
+        name: 'Error404',
+        showInNavBar: false,
+    },
+
+    {
+        module: Error404,
+        route: '*',
+        name: 'Error404',
+        showInNavBar: false,
+    },
 ];

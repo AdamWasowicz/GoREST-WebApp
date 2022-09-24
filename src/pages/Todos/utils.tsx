@@ -19,6 +19,7 @@ const useTodos = () => {
     const currentPage = useAppSelector(state => state.todo.currentPage);
     const todos = useAppSelector(state => state.todo.todos);
 
+
     const handleTodoDataRecived = (data: getTodoWithUserNameResponse) => {
         dispatch(addTodos(data.data));
         dispatch(setTodoCurrentPage(data.meta.pagination.page + 1));
@@ -29,35 +30,21 @@ const useTodos = () => {
         return !!todos[params.index];
     }
 
-    const loadMoreTodos = async (params: IndexRange) => {
+    const loadMoreTodos = async () => {
         if (isLoading == true)
             return;
 
-        const client = new GoRESTClient(
-            () => dispatch(setTodoIsLoading(true)),
-            () => dispatch(setTodoIsLoading(false))
-        );
+        const client = new GoRESTClient();
 
+        dispatch(setTodoIsLoading(true))
         await client.getTodosWithUserName(currentPage)
             .then(response => {
                 handleTodoDataRecived(response);
+                dispatch(setTodoIsLoading(false));
             });
     }
 
-
-    const loadInitialData = () => {
-        const client = new GoRESTClient(
-            () => dispatch(setTodoIsLoading(true)),
-            () => dispatch(setTodoIsLoading(false))
-        )
-        
-        client.getTodosWithUserName(currentPage)
-            .then(
-                (response) => handleTodoDataRecived(response)
-            );
-    }
-
-    const renderRow = (props:ListRowProps): JSX.Element => {
+    const renderRow = (props: ListRowProps): JSX.Element => {
         return <TodoItem
             key={props.key}
             data={todos[props.index]}
@@ -68,13 +55,14 @@ const useTodos = () => {
     
     useEffect(() => {
         if (todos.length === 0)
-            loadInitialData();
+            loadMoreTodos();
     }, [])
     
     
     return {
         loadMoreTodos, todos, isRowLoaded,
         height, width, renderRow,
+        isLoading
     }
 }   
 
