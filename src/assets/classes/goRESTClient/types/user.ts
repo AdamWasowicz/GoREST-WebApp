@@ -5,3 +5,10 @@ export default interface UserModel {
     gender: 'male' | 'female',      //Present as Image
     status: 'inactive' | 'active',  //Present as icon color
 } 
+
+export interface CreateUserModel {
+    name: string,
+    email: string,
+    status: string,
+    gender: string,
+}

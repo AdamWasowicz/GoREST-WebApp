@@ -4,6 +4,9 @@ import TodoModel, { TodoWithUserNameModel } from './types/todo';
 import RequestMeta from './types/requestMeta'
 import PostModel, { PostCompleteModel } from './types/post';
 import CommentModel from './types/comment';
+import { useAppSelector } from '../../../redux/hooks';
+import { CreateUserModel } from './types/user';
+import Users from '../../../pages/Users';
 
 
 export default class GoRESTClient {
@@ -25,6 +28,17 @@ export default class GoRESTClient {
             Promise.reject();
         })
         
+    }
+
+    private makePostRequestReturnPromise = async (route: string, body: any, apiKey: string): Promise<AxiosResponse<any>> => {
+        const url = this.apiURL + route;
+
+        return axios({
+            method: 'POST',
+            url: url,
+            headers: {'Authorization': 'Bearer ' + apiKey},
+            data: body,
+        });
     }
 
     public getUsersReturnPromise = async (pageNumber: number): Promise<getUsersResponse> => {
@@ -210,6 +224,11 @@ export default class GoRESTClient {
         return comments;
     }
 
+    public postNewUserReturnPromise = async (body: CreateUserModel, apiKey: string): Promise<AxiosResponse<any>> => {
+        const route = ApiEnpoints.postUser.route;
+        return this.makePostRequestReturnPromise(route, body, apiKey);
+    }
+
 
     constructor() {}
 }
@@ -232,4 +251,8 @@ const ApiEnpoints = {
         resourceName: 'Todos',
         route: '/public/v1/todos'
     },
+    postUser: {
+        resourceName: Users,
+        route: '/public/v1/users'
+    }
 };

@@ -1,13 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { enableMapSet } from 'immer';
 
 //Reducers
 import UserReducer from './features/user-slice';
 import TodoReducer from './features/todo-slice';
 import PostReducer from './features/post-slice';
-
-
-//enableMapSet();
+import AuthReducer from './features/auth-slice';
 
 //Store
 export const store = configureStore({
@@ -15,6 +12,7 @@ export const store = configureStore({
         user: UserReducer,
         todo: TodoReducer,
         post: PostReducer,
+        auth: AuthReducer,
     }
 })
 

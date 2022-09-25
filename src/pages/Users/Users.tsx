@@ -4,6 +4,9 @@ import './style.scss';
 import InfiniteList from "../../components/InfiniteList";
 import Loading from "../../components/Loading";
 import DataFetchError from "../../components/DataFetchError";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import CreateUserModal from "../../components/CreateUserModal";
 
 
 const User: React.FC = () => {
@@ -11,11 +14,13 @@ const User: React.FC = () => {
     const { 
         loadMoreUsers, users, isRowLoaded,
         height, width, renderRow,
-        errorMsg
+        errorMsg, openModal, closeModal,
+        isModalOpen,
     } = useUsers();
 
 
     return (
+        <>
         <div className='User'>
             <div className="ContentContainer">
                 {
@@ -38,7 +43,13 @@ const User: React.FC = () => {
                     </div>
                 }
             </div>
+
+            <div className='ShowModalButton' onClick={openModal}>
+                    <FontAwesomeIcon icon={faPlus} title='Add Users'/>
+            </div>
         </div>
+        <CreateUserModal isOpen={isModalOpen} handleClose={closeModal}/>
+        </>
     )
 }
 

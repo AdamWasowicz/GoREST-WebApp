@@ -23,7 +23,7 @@ const Todos: React.FC = () => {
                     ? <InfiniteList
                             isRowLoaded={isRowLoaded}
                             loadMoreRowsCallback={loadMoreTodos}
-                            height={height * 1.2}
+                            height={height}
                             width={width}
                             rowCount={todos.length}
                             rowHeight={275}

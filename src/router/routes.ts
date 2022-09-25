@@ -8,7 +8,7 @@ import { IRoute } from "./IRoute";
 
 export const routes: IRoute[] = [
     {
-        module: TestAPI,
+        module: Users,
         route: '',
         name: 'Test',
         showInNavBar: false,

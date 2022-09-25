@@ -156,4 +156,45 @@ $item-padding-horizontal: calc(100vw / 300);
             }
         }
     }
+
+    > .ShowModalButton {
+        position: absolute;
+        z-index: 3;
+
+        top: 150px;
+        right: 10px;
+
+        //Object size
+        width: 120px;
+        height: 120px;
+
+        @media (max-width: 600px) {
+            width: 75px;
+            height: 75px;
+            font-size: 24px;
+        }
+
+        //Flex
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-content: center;
+
+        //Border
+        border: 2px solid black;
+
+        font-size: 70px;
+
+        background-color: rgb(0, 0, 0);
+        color: $active-color;
+        border-radius: 100%;
+
+        transition: 0.3s;
+
+        &:hover {
+            background-color: $navBar-primary-80;
+            transition: 0.3s;
+            color: black;
+        }
+    }
 }

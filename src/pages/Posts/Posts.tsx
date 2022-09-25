@@ -22,7 +22,7 @@ const Posts: React.FC = () => {
                     ? <InfiniteList
                         isRowLoaded={isRowLoaded}
                         loadMoreRowsCallback={loadMorePosts}
-                        height={height / 1.2}
+                        height={height}
                         width={width}
                         rowCount={posts.length}
                         rowHeight={400}

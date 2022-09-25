@@ -1,0 +1,241 @@
+@import '../../assets/constants/styleConstants.scss';
+
+
+.CreateUserModalContainer {
+    z-index: 8;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 16px;
+    background-color: white;
+    width: 800px;
+    height: 500px;
+
+    //RWD
+    @media (orientation: portrait) and (max-width: 400px) {
+        max-width: 300px;
+    }
+
+    @media (max-height: 400px){
+        height: 350px;
+    }
+}
+
+.CreateUserModalOverlay {
+    z-index: 8;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(143, 140, 140, 0.6);
+}
+
+.CreateUserModal {
+    //Object size
+    width: 100%;
+    height: 100%;
+
+    @media (max-height: 400px) {
+        overflow-y: scroll; 
+    }
+
+    text-align: center;
+
+    .IconContainer {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+
+        //Icon
+        >.Icon {
+            width: 64px;
+            font-size: 64px;
+            transition: 0.3s;
+
+            //Object position
+            margin-left: auto;
+            margin-right: auto;
+
+            &:hover {
+                color: $active-color;
+                transition: 0.3s;
+            }
+        }
+    }
+
+    >.CreateUserAuth {
+        width: 100%;
+        height: 100%;
+
+
+        >.Container {
+            padding: 16px;
+
+            //Flex
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            text-align: center;
+
+
+            >h1 {
+                font-family: $font-header;
+                font-size: 32px;
+            }
+
+            >P {
+                font-family: $font-normal;
+                font-size: 24px;
+                margin-bottom: 24px;
+            }
+
+            >.ButtonContainer {
+                width: 60%;
+
+                //Flex
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+
+
+                >button {
+                    //Object size
+                    width: 150px;
+                    height: 75px;
+
+                    //Font
+                    font-size: 24px;
+                    font-family: $font-header;
+
+                    //Color
+                    background-color: white;
+
+                    //Border
+                    border: 2px solid black;
+                    border-radius: 5%;
+
+                    //Transition
+                    transition: 0.3s;
+
+                    &:hover {
+                        transition: 0.3s;
+                        background-color: $navBar-primary-80;
+                    }
+                }
+            }
+
+            >input {
+                //Object position
+                margin-top: 16px;
+                margin-bottom: 16px;
+
+                //Object size
+                width: 80%;
+                height: 50px;
+
+                //Content positon
+                padding: 8px 16px;
+
+                //Font
+                font-size: 24px;
+                font-family: $font-normal;
+            }
+
+            >button {
+                //Object size
+                width: 150px;
+                height: 75px;
+
+                //Font
+                font-size: 24px;
+                font-family: $font-header;
+
+                //Color
+                background-color: white;
+
+                //Border
+                border: 2px solid black;
+                border-radius: 5%;
+
+                //Transition
+                transition: 0.3s;
+
+                &:hover {
+                    transition: 0.3s;
+                    background-color: $navBar-primary-80;
+                }
+            }
+        }
+    }
+
+
+    >.CreateUserForm {
+        //Object size
+        width: 100%;
+        height: 100%;
+
+        > .Container {
+            //Content position
+            padding: 16px;
+
+            > h1 {
+                //Font
+                font-size: 32px;
+                font-family: $font-header;
+            }
+
+            .FieldContainer {
+                //Flex
+                display: flex;
+                flex-direction: column;
+
+                
+                > label {
+                    width: 100%;
+                    text-align: left;
+
+                    font-family: $font-normal;
+                    font-size: 20px;
+
+                    > p {
+                        font-size: 24px;
+                        font-weight: bold;
+                    }
+
+
+                    > input[type='text'] {
+                        width: 100%;
+                        height: 40px;
+                        padding: 4px 8px;
+                        font-weight: normal;
+                        margin-bottom: 8px;
+                    }
+
+                    > input[type='radio'] {
+                        font-weight: normal;
+                        margin-bottom: 8px;
+                        margin-left: 8px;
+                    }
+                } 
+            }
+
+            button {
+                width: 150px;
+                height: 75px;
+                font-size: 32px;
+                font-family: $font-header;
+
+                background-color: white;
+                border: 2px solid black;
+                transition: 0.3s;
+
+                &:hover {
+                    background-color: $navBar-primary-80;
+                    transition: 0.3s;
+                }
+            }
+        }
+    }
+}

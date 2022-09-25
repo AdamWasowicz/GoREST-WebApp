@@ -9,7 +9,7 @@ interface PostState {
     isLoading: boolean,
 }
 
-const initialState: PostState ={
+const initialState: PostState = {
     posts: [],
     currentPage: 1,
     isMore: true,

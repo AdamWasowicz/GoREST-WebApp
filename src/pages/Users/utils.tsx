@@ -11,6 +11,7 @@ import UserItem from "./UserItem";
 
 const useUsers = () => {
 
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [errorMsg, setErrorMsg] = useState<string>('');
     const { height, width } = useWindowDimensions();
     const dispatch = useDispatch();
@@ -60,6 +61,15 @@ const useUsers = () => {
 
     }
 
+    const openModal = () => {
+        setIsModalOpen(true);
+    }
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    }
+
+
     //Load initial data
     useEffect(() => {
         if (users.length === 0)
@@ -70,7 +80,8 @@ const useUsers = () => {
     return { 
         loadMoreUsers, users, isRowLoaded,
         height, width, renderRow,
-        errorMsg
+        errorMsg, openModal, closeModal,
+        isModalOpen,
     }
 }
 
