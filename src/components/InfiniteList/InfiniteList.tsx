@@ -26,7 +26,7 @@ const InfiniteList: React.FC<InfiniteListProps> = (props) => {
     const defaultMaxRowCount = 3000;
     const defaultMinimumBatchSize = 1;
     const defaultThreshold = 10;
-    const defaultListClassName = 'ItemsContainer';
+    const defaultListClassName = 'InfiniteList';
 
 
     return (

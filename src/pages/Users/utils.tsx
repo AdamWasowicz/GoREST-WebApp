@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppSelector } from "../../redux/hooks";
 import { Index, IndexRange, ListRowProps } from "react-virtualized";
 import useWindowDimensions from "../../assets/hooks/useWindowDimensions";
@@ -11,6 +11,7 @@ import UserItem from "./UserItem";
 
 const useUsers = () => {
 
+    const [errorMsg, setErrorMsg] = useState<string>('');
     const { height, width } = useWindowDimensions();
     const dispatch = useDispatch();
 
@@ -43,7 +44,10 @@ const useUsers = () => {
             .then(response => {
                 handleUserDataRecived(response);
                 dispatch(setUserIsLoading(false));
-            });
+            })
+            .catch(error => {
+                setErrorMsg('Data fetching Error');
+            })
     }
 
     //Render element for list
@@ -66,7 +70,7 @@ const useUsers = () => {
     return { 
         loadMoreUsers, users, isRowLoaded,
         height, width, renderRow,
-        isLoading
+        errorMsg
     }
 }
 

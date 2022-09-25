@@ -1,17 +1,18 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import App from './components/App/App';
+import { createRoot } from 'react-dom/client';
+import Modal from 'react-modal';
 
+const container = document.getElementById('root');
+const root = createRoot(container);
+//Register Modal for whole App
+Modal.setAppElement('#root');
 
-const root = document.getElementById('root');
-
-ReactDOM.render(
-  
+root.render(
   <Provider store={store}>
     <App/>
-  </Provider>,
-  root
+  </Provider>
 );
 

@@ -1,7 +1,7 @@
 export default interface CommentModel {
-    id: number,
-    post_id: number,
-    name: string,
-    email: number,
-    body: string,
+    id: number,             //Omit
+    post_id: number,        //Omit
+    name: string,           //Present as Text
+    email: number,          //Present as Text
+    body: string,           //Present as Text
 }

@@ -8,11 +8,11 @@ export default interface PostModel {
 }
 
 export interface PostCompleteModel {
-    id: number,
-    user_id: number,
-    title: string,
-    body: string,
+    id: number,                 //Omit
+    user_id: number,            //Omit
+    title: string,              //Present as Text
+    body: string,               //Present as Text
 
-    userName: string,
-    comments: CommentModel[]
+    userName: string,           //Present as Text
+    comments: CommentModel[]    //Present as Modal
 }

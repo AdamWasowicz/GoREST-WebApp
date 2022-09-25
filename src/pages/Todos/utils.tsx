@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppSelector } from "../../redux/hooks";
 import { Index, IndexRange, ListRowProps } from "react-virtualized";
 import useWindowDimensions from "../../assets/hooks/useWindowDimensions";
@@ -11,6 +11,7 @@ import TodoItem from "./TodoItem";
 
 const useTodos = () => {
 
+    const [errorMsg, setErrorMsg] = useState<string>('b');
     const { height, width } = useWindowDimensions();
     const dispatch = useDispatch();
 
@@ -31,6 +32,8 @@ const useTodos = () => {
     }
 
     const loadMoreTodos = async () => {
+        setErrorMsg('');
+
         if (isLoading == true)
             return;
 
@@ -41,7 +44,10 @@ const useTodos = () => {
             .then(response => {
                 handleTodoDataRecived(response);
                 dispatch(setTodoIsLoading(false));
-            });
+            })
+            .catch(error => {
+                setErrorMsg('Data fetching Error');
+            })
     }
 
     const renderRow = (props: ListRowProps): JSX.Element => {
@@ -62,7 +68,7 @@ const useTodos = () => {
     return {
         loadMoreTodos, todos, isRowLoaded,
         height, width, renderRow,
-        isLoading
+        isLoading, errorMsg
     }
 }   
 

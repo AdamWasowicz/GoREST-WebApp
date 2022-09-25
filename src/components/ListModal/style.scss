@@ -1,0 +1,52 @@
+@import '../../assets/constants/styleConstants.scss';
+
+
+.ModalContainer {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 16px;
+    background-color: white;
+    max-width: 800px;
+
+    //RWD
+    @media (orientation: portrait) and (max-width: 400px) {
+        max-width: 350px;
+    }
+}
+
+.ModalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(143, 140, 140, 0.6);
+}
+
+.Modal {
+    //Flex
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+
+    padding: 8px 16px;
+
+
+    //Icon
+    > .Icon {
+        font-size: 40px;
+        transition: 0.3s;
+
+        &:hover {
+            color: $active-color;
+            transition: 0.3s;
+        }
+    }
+
+    .List {
+        width: 100%;
+        padding: 0px 8px;
+        background-color: $navBar-primary-95;
+    }
+}

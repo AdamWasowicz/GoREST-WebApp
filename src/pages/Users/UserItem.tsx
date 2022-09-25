@@ -11,6 +11,14 @@ const UserItem: React.FC<{userData?: UserModel, style: {}}> = ({userData, style}
         let className = 'Icon';
         if (userData.status == 'inactive')
             className += ' Inactive';
+        else if (userData.status == 'active') {
+            className += ' Active';
+        }
+
+        if (userData.gender == 'male')
+            className += ' Male';
+        else if (userData.gender == 'female')
+            className += ' Female'
 
         return className;
     }

@@ -13,6 +13,7 @@ const App: React.FunctionComponent = () => {
             <Router>
                 <NavBar/>
                 <ScreenRouter/>
+                <Footer/>
             </Router>
         </div>
     );

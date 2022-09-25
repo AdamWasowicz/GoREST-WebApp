@@ -11,12 +11,18 @@ export default class GoRESTClient {
     private apiURL: string = 'https://gorest.co.in';
 
 
-    private makeGetRequestReturnPromise = async (route: string): Promise<AxiosResponse<any>> => {
+    private makeGetRequestReturnPromise = async (route: string): Promise<any>=> {
         const url = this.apiURL + route;
 
         return axios({
             method: 'GET',
             url: url,
+        })
+        .then( response => {
+            return response.data;
+        })
+        .catch( error => {
+            Promise.reject();
         })
         
     }
@@ -24,56 +30,49 @@ export default class GoRESTClient {
     public getUsersReturnPromise = async (pageNumber: number): Promise<getUsersResponse> => {
         const route = ApiEnpoints.getUsers.route + `?page=${pageNumber}`;
 
-        //recives Promise<AxiosResponse<getUserExponse>>
-        const result = await this.makeGetRequestReturnPromise(route);
-
-        //creates new Promise<getUserResponse>
-        const promise = new Promise<getUsersResponse>( (resolve, reject) => {
-            resolve(result.data);
-        })
-
-        //returns promise
-        return promise;
+        //returns Promise<getUserExponse>
+        return await this.makeGetRequestReturnPromise(route)
+            .then(response => {
+                return response
+            })
+            .catch(error => {
+                Promise.reject();
+            })
     }
 
     public getCommentsByPostIdReturnPromise = async (pageNumber: number, postId: number): Promise<getCommentResponse> => {
         const route = ApiEnpoints.getComments.route + `?page=${pageNumber}&post_id=${postId}`;
 
-        //recives Promise<AxiosResponse<getCommentResponse>>
-        const result = await this.makeGetRequestReturnPromise(route);
-        
-        //creates new Promise<getCommentResponse>
-        const promise = new Promise<getCommentResponse>((resolve) => {
-            resolve(result.data);
-        })
-
-        return promise;
+        //returns Promise<getCommentResponse>
+        return this.makeGetRequestReturnPromise(route)
+            .then(response => {
+                return response;
+            })
+            .catch(error => {
+                Promise.reject();
+            });
     }
 
     private getUserByIdReturnPromise = async (userId: number): Promise<getUserResponse> => {
         const route = ApiEnpoints.getUsers.route + `/${userId}`;
-        let promise: Promise<getUserResponse>;
 
-        //recives Promise<AxiosResponse<getUserExponse>>
-        await this.makeGetRequestReturnPromise(route)
+        //returns Promise<getUserResponse>
+        return await this.makeGetRequestReturnPromise(route)
             .then(response => {
-                promise = new Promise<getUserResponse>( (resolve, reject) => {
-                    resolve(response.data);
-                });
+                return response;
             })
             .catch(error => {
-                //Promise.reject(new Error('This resource does not exist'))
+                Promise.reject();
             });
-
-        return promise;
     }
 
     public getTodosWithUserName = async (pageNumber: number): Promise<getTodoWithUserNameResponse> => {
         const route = ApiEnpoints.getTodos.route + `?page=${pageNumber}`;
         const result = await this.makeGetRequestReturnPromise(route);
 
-        const dataFromAPI: TodoModel[] = result.data.data;
-        const metaFromApi: RequestMeta = result.data.meta;
+        const dataFromAPI: TodoModel[] = result.data;
+        const metaFromApi: RequestMeta = result.meta;
+
 
         //Get names coresponding to user_id and asign thnem to model
         let todosWithUserName: TodoWithUserNameModel[] = [];
@@ -112,21 +111,17 @@ export default class GoRESTClient {
             data: todosWithUserName,
         };
 
-        //create promise
-        const promise = new Promise<getTodoWithUserNameResponse>((resolve, reject) =>{
-            resolve(promisedData)  
-        })
 
         //return promise
-        return promise;
+        return promisedData;
     }
 
     public getPostsWithCommentsReturnPromise = async (pageNumber: number): Promise <getPostsWithCommentsResponse> => {
         const route = ApiEnpoints.getPosts.route + `?page=${pageNumber}`;
         const result = await this.makeGetRequestReturnPromise(route);
 
-        const dataFromAPI: PostModel[] = result.data.data;
-        const metaFromApi: RequestMeta = result.data.meta;
+        const dataFromAPI: PostModel[] = result.data;
+        const metaFromApi: RequestMeta = result.meta;
 
         let postsWithComments: PostCompleteModel[] = [];
 
@@ -162,14 +157,21 @@ export default class GoRESTClient {
         )
 
         //Get username
-        Promise.all(
-            await postsWithComments.map( async (item, index) => {
+        await Promise.all(
+            await postsWithComments.map(async (item, index) => {
                 await this.getUserByIdReturnPromise(item.user_id)
                     .then(result => {
                         postsWithComments[index].userName = result.data.name;
                     })
                     .catch(error => {
-                        postsWithComments[index].userName = 'Anonymous';
+                        postsWithComments[index] = {
+                            id: postsWithComments[index].id,
+                            body: postsWithComments[index].body,
+                            title: postsWithComments[index].title,
+                            user_id: postsWithComments[index].user_id,
+                            comments: postsWithComments[index].comments,
+                            userName: 'Anonymous'
+                        };
                     })
             })
         )
@@ -179,11 +181,8 @@ export default class GoRESTClient {
             meta: metaFromApi,
             data: postsWithComments,
         }
-        const promise = new Promise<getPostsWithCommentsResponse>((resolve) => {
-            resolve(promisedData);
-        })
 
-        return promise;
+        return promisedData;
     }
 
     private getCommentsForPost = async (postId: number): Promise<CommentModel[]> => {
@@ -191,25 +190,24 @@ export default class GoRESTClient {
         let isMore = true;
         let pageNumber = 1;
 
-
+        //While there are still pages to load
         while (isMore) {
+            //Get that page data
             await this.getCommentsByPostIdReturnPromise(pageNumber, postId)
                 .then(response => {
                     pageNumber++;
 
+                    //If there are no more pages then stop
                     if (pageNumber >= response.meta.pagination.pages)
                         isMore = false;
                     
+                    //If response is not null then add it to array
                     if (response.data != null)
                         comments = [...comments, ...response.data];
                 });
         }
 
-        const promise = new Promise<CommentModel[]>((resolve) => {
-            resolve(comments);
-        })
-
-        return promise;
+        return comments;
     }
 
 

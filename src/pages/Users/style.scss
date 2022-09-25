@@ -13,7 +13,6 @@ $item-padding-horizontal: calc(100vw / 300);
     //Object size
     width: 100%;
     max-width: 100%;
-    height: 100vh;
 
     //Color
     background-color: $navBar-primary-95;
@@ -25,6 +24,11 @@ $item-padding-horizontal: calc(100vw / 300);
         padding: 0px 24px;
 
         
+        > .Container {
+            height: 100vh;
+        }
+
+
         //UserItem
         .UserItem {
             //Object size
@@ -90,9 +94,20 @@ $item-padding-horizontal: calc(100vw / 300);
                         padding: 0;
                     }
 
-                    //When user is inactive
-                    &.Inactive {
-                        color: $navBar-primary-80;
+                    &.Inactive.Male {
+                        color: $male-icon-inactive-color;
+                    }
+
+                    &.Inactive.Female {
+                        color: $female-icon-inactive-color
+                    }
+
+                    &.Active.Male {
+                        color: $male-icon-active-color;
+                    }
+
+                    &.Active.Female {
+                        color: $female-icon-active-color;
                     }
                 }
 

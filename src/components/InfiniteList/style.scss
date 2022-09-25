@@ -1,9 +1,11 @@
-.ItemsContainer {
+@import '../../assets//constants/styleConstants.scss';
+
+.InfiniteList {
     //Object size
     width: 100%;
 }
 
 //Hide scrool bar
- .ItemsContainer::-webkit-scrollbar {
+ .InfiniteList::-webkit-scrollbar {
     display: none;
 }

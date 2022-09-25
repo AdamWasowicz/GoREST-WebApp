@@ -1,0 +1,159 @@
+@import '../../assets/constants/styleConstants.scss';
+
+//Calc
+$todo-item-width: calc(100% / 2);
+$todo-item-height: calc(100% / 1);
+$icon-size-portrait: calc(100vw / 40);
+$data-name-font-size: 38px;
+$data-title-font-size: 24px;
+$data-font-size-landscape: 50px;
+$item-padding-horizontal: calc(100vw / 300);
+
+
+.Posts {
+    //Object size
+    width: 100%;
+    max-width: 100%;
+
+    //Color
+    background-color: $navBar-primary-95;
+
+
+    //ContentContainer
+    >.ContentContainer {
+        //Content position
+        padding: 0px 24px;
+
+
+        >.Container {
+            height: 100vh;
+        }
+
+
+        .PostItem {
+            //Object size
+            width: $todo-item-width;
+
+            //Content positon
+            padding: 10px $item-padding-horizontal;
+
+
+            //Container
+            >.Container {
+                //Flex
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+
+                overflow: hidden;
+
+                //Object size
+                height: $todo-item-height;
+                max-height: 325px;
+                max-width: 1100px;
+
+                //Content position
+                padding: 16px;
+
+                //Object position
+                margin-left: auto;
+                margin-right: auto;
+                margin-bottom: 24px;
+
+                //Color
+                background-color: white;
+
+                //Shadow
+                box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+
+                //RWD portrait
+                @media (orientation: portrait) {
+                    //Flex
+                    flex-direction: column;
+                }
+
+                >.Text {
+                    >h1 {
+                        font-size: $data-name-font-size;
+                        font-family: $font-header;
+                        font-weight: bold;
+                        color: $active-dark-color;
+
+                        @media (max-width: 600px) {
+                            font-size: 28px;
+                        }
+                    }
+
+
+                    >h3 {
+                        font-size: $data-title-font-size;
+                        font-family: $font-normal;
+                        color: $navBar-primary-20;
+                        padding-bottom: 8px;
+                        border-bottom: 2px solid $navBar-primary-80;
+
+                        //RWD portrait
+                        @media (orientation: portrait) {
+                            font-size: 24px;
+                        }
+
+                        @media (max-width: 600px) {
+                            font-size: 16px;
+                        }
+                    }
+
+                    >.LongText {
+                        font-size: 18px;
+                        font-family: $font-normal;
+                        font-weight: bold;
+                        max-height: 100px;
+                        margin-top: 8px;
+
+                        overflow-y: hidden;
+                        overflow-x: hidden;
+
+                        //RWD portrait
+                        @media (orientation: portrait) {
+                            font-size: 24px;
+                        }
+
+                        @media (max-width: 600px) {
+                            font-size: 16px;
+                            overflow-y: visible;
+                        }
+                    }
+                }
+
+
+                >button {
+                    //Object size
+                    width: 200px;
+                    height: 40px;
+
+                    margin-left: auto;
+                    margin-right: auto;
+
+                    //Color
+                    background-color: white;
+
+                    //Border
+                    border-radius: 5%;
+                    border: 2px solid black;
+
+                    //Font
+                    font-family: $font-header;
+                    font-size: 24px;
+
+                    //Transition
+                    transition: 0.3s;
+
+
+                    &:hover {
+                        background-color: $navBar-primary-95;
+                        transition: 0.3s;
+                    }
+                }
+            }
+        }
+    }
+}

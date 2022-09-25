@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppSelector } from "../../redux/hooks";
 import { Index, ListRowProps } from "react-virtualized";
 import useWindowDimensions from "../../assets/hooks/useWindowDimensions";
@@ -10,6 +10,7 @@ import PostItem from "./PostItem";
 
 const usePosts = () => {
 
+    const [errorMsg, setErrorMsg] = useState<string>('');
     const { height, width } = useWindowDimensions();
     const dispatch = useDispatch();
 
@@ -42,6 +43,9 @@ const usePosts = () => {
                 handlePostsResponseRecived(result);
                 dispatch(setPostIsLoading(false));
             })
+            .catch(error => {
+                setErrorMsg('Data fetching Error');
+            });
     }
 
     const renderRow = (props: ListRowProps): JSX.Element => {
@@ -61,7 +65,7 @@ const usePosts = () => {
     return { 
         loadMorePosts, posts, isRowLoaded,
         height, width, renderRow,
-        isLoading
+        errorMsg
     }
 }
 

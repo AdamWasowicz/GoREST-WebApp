@@ -3,13 +3,15 @@ import useTodos from './utils';
 import './style.scss';
 import InfiniteList from "../../components/InfiniteList";
 import Loading from '../../components/Loading';
+import DataFetchError from '../../components/DataFetchError';
 
 
 const Todos: React.FC = () => {
 
     const {
         loadMoreTodos, todos, isRowLoaded,
-        height, width, renderRow, isLoading
+        height, width, renderRow,
+        errorMsg,
     } = useTodos();
 
 
@@ -17,17 +19,23 @@ const Todos: React.FC = () => {
         <div className='Todos'>
             <div className='ContentContainer'>
                 {
-                    todos.length != 0 && isLoading == false
+                    todos.length != 0
                     ? <InfiniteList
                             isRowLoaded={isRowLoaded}
                             loadMoreRowsCallback={loadMoreTodos}
-                            height={height / 1.2}
+                            height={height * 1.2}
                             width={width}
                             rowCount={todos.length}
                             rowHeight={275}
                             renderRowCallback={renderRow}
                     />
-                    : <Loading/>
+                    : <div className='Container'>
+                        {
+                            errorMsg != ''
+                            ? <DataFetchError onButtonClick={loadMoreTodos}/>
+                            : <Loading/>
+                        }
+                    </div>
                 }
             </div>
         </div>
